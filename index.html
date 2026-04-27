@@ -1,133 +1,1478 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INTERVAL</title>
-    <link rel="manifest" href="manifest.webmanifest">
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <meta name="theme-color" content="#1a1a1a">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-        }
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            max-width: 500px;
-        }
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .icon {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
-        }
-        p {
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #666;
-            margin-bottom: 30px;
-        }
-        .button {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: none;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
-        }
-        .install-btn {
-            display: none;
-            margin-top: 20px;
-        }
-        .status {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #999;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+<meta name="theme-color" content="#0a0c0f" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="INTERVAL" />
+<title>INTERVAL</title>
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" type="image/svg+xml" href="icon.svg" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400;500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0a0c0f;
+    --bg-2:#0f1216;
+    --surface:#13171c;
+    --surface-2:#1a1f26;
+    --line:rgba(255,255,255,0.06);
+    --line-2:rgba(255,255,255,0.10);
+    --text:#e7eaef;
+    --text-dim:#8a93a0;
+    --text-faint:#4a525e;
+    --accent:#7dd3c0;
+    --accent-glow:rgba(125,211,192,0.35);
+    --danger:#e8867c;
+    --warn:#e8c87c;
+    --shadow:0 30px 80px rgba(0,0,0,0.45);
+  }
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);height:100%;overflow:hidden;font-family:'JetBrains Mono',monospace;-webkit-font-smoothing:antialiased;}
+  body{
+    background:
+      radial-gradient(circle at 20% 0%, rgba(125,211,192,0.06), transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(125,211,192,0.03), transparent 50%),
+      var(--bg);
+    padding-top:env(safe-area-inset-top);
+    padding-bottom:env(safe-area-inset-bottom);
+    user-select:none;
+    -webkit-user-select:none;
+  }
+
+  /* film grain overlay */
+  body::before{
+    content:'';
+    position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0.4;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode:overlay;
+  }
+
+  #app{position:relative;height:100vh;width:100vw;overflow:hidden;z-index:2;}
+
+  /* ========== TOP BAR ========== */
+  .topbar{
+    position:absolute;top:0;left:0;right:0;
+    padding:24px 24px 0;
+    display:flex;justify-content:space-between;align-items:center;
+    z-index:10;
+  }
+  .brand{
+    font-family:'Fraunces',serif;
+    font-weight:300;
+    letter-spacing:0.4em;
+    font-size:11px;
+    color:var(--text-dim);
+    text-transform:uppercase;
+  }
+  .brand span{color:var(--accent);}
+  .icon-btn{
+    background:transparent;border:1px solid var(--line);
+    width:38px;height:38px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text-dim);cursor:pointer;
+    transition:all 0.3s cubic-bezier(.2,.8,.2,1);
+  }
+  .icon-btn:active{transform:scale(0.92);}
+  .icon-btn:hover{color:var(--text);border-color:var(--line-2);}
+  .icon-btn svg{width:16px;height:16px;}
+
+  /* ========== TIMER VIEW ========== */
+  .view{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:80px 24px 32px;
+    transition:opacity 0.4s, transform 0.4s;
+  }
+  .view.hidden{opacity:0;pointer-events:none;transform:translateY(20px);}
+
+  /* circular progress ring */
+  .ring-wrap{
+    position:relative;
+    width:min(82vw, 360px);
+    aspect-ratio:1;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ring-svg{
+    position:absolute;inset:0;width:100%;height:100%;
+    transform:rotate(-90deg);
+  }
+  .ring-bg{
+    fill:none;stroke:var(--line);stroke-width:1;
+  }
+  .ring-fg{
+    fill:none;stroke:var(--accent);stroke-width:1.5;
+    stroke-linecap:round;
+    transition:stroke-dashoffset 0.95s linear;
+    filter:drop-shadow(0 0 8px var(--accent-glow));
+  }
+  .ring-ticks{position:absolute;inset:0;pointer-events:none;}
+  .ring-ticks line{stroke:var(--line-2);stroke-width:0.5;}
+
+  .center-display{
+    position:relative;text-align:center;z-index:2;
+    display:flex;flex-direction:column;align-items:center;
+  }
+  .label-status{
+    font-size:9px;letter-spacing:0.5em;
+    color:var(--text-faint);text-transform:uppercase;
+    margin-bottom:18px;
+    padding:5px 14px;border:1px solid var(--line);border-radius:100px;
+  }
+  .label-status.active{color:var(--accent);border-color:rgba(125,211,192,0.3);}
+  .label-status.paused{color:var(--warn);border-color:rgba(232,200,124,0.3);}
+
+  .time-display{
+    font-family:'Fraunces',serif;
+    font-weight:300;
+    font-size:clamp(54px, 13vw, 76px);
+    letter-spacing:-0.04em;
+    line-height:1;
+    color:var(--text);
+    font-feature-settings:"tnum";
+    margin:0;
+  }
+  .time-display.editing{color:var(--accent);}
+  .time-display .colon{color:var(--text-faint);font-weight:200;margin:0 -2px;}
+
+  .interval-meta{
+    margin-top:14px;
+    display:flex;align-items:center;gap:12px;
+    font-size:10px;letter-spacing:0.3em;
+    color:var(--text-faint);text-transform:uppercase;
+  }
+  .interval-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--text-faint);}
+  .interval-meta .count{color:var(--text-dim);}
+
+  /* preset chips */
+  .presets{
+    display:flex;gap:8px;margin-top:36px;flex-wrap:wrap;justify-content:center;
+    max-width:340px;
+  }
+  .chip{
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--text-dim);
+    padding:8px 14px;border-radius:100px;
+    font-family:inherit;font-size:11px;letter-spacing:0.15em;
+    cursor:pointer;
+    transition:all 0.25s;
+    text-transform:uppercase;
+  }
+  .chip:active{transform:scale(0.94);}
+  .chip:hover{color:var(--text);border-color:var(--line-2);}
+  .chip.active{color:var(--accent);border-color:rgba(125,211,192,0.4);background:rgba(125,211,192,0.04);}
+
+  /* control buttons */
+  .controls{
+    display:flex;gap:14px;margin-top:32px;align-items:center;
+  }
+  .ctrl-btn{
+    background:var(--surface);
+    border:1px solid var(--line);
+    color:var(--text);
+    width:54px;height:54px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    transition:all 0.25s cubic-bezier(.2,.8,.2,1);
+  }
+  .ctrl-btn:active{transform:scale(0.9);}
+  .ctrl-btn:hover{border-color:var(--line-2);background:var(--surface-2);}
+  .ctrl-btn svg{width:18px;height:18px;}
+  .ctrl-btn.primary{
+    width:78px;height:78px;
+    background:var(--accent);color:var(--bg);border-color:transparent;
+    box-shadow:0 0 30px var(--accent-glow);
+  }
+  .ctrl-btn.primary:hover{background:#8fdfcc;}
+  .ctrl-btn.primary svg{width:24px;height:24px;}
+  .ctrl-btn.danger{color:var(--danger);}
+  .ctrl-btn:disabled{opacity:0.3;pointer-events:none;}
+
+  /* ========== STOPWATCH-SPECIFIC ========== */
+  .laps-container{
+    margin-top:20px;
+    width:100%;max-width:340px;
+    max-height:140px;overflow-y:auto;
+    border-top:1px solid var(--line);
+    padding-top:10px;
+  }
+  .laps-container::-webkit-scrollbar{width:0;}
+  .lap-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:8px 4px;font-size:12px;
+    border-bottom:1px solid var(--line);
+    color:var(--text-dim);
+  }
+  .lap-row .lap-num{color:var(--text-faint);letter-spacing:0.2em;font-size:10px;}
+  .lap-row .lap-time{font-feature-settings:"tnum";color:var(--text);}
+
+  /* ========== MODE SWITCHER ========== */
+  .mode-switch{
+    position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+    display:flex;gap:4px;
+    background:var(--surface);border:1px solid var(--line);
+    padding:4px;border-radius:100px;
+    z-index:10;
+  }
+  .mode-btn{
+    background:transparent;border:none;
+    color:var(--text-faint);
+    padding:8px 18px;border-radius:100px;
+    font-family:inherit;font-size:10px;letter-spacing:0.3em;
+    cursor:pointer;text-transform:uppercase;
+    transition:all 0.3s;
+  }
+  .mode-btn.active{background:var(--surface-2);color:var(--text);}
+
+  /* ========== EDIT TIME OVERLAY ========== */
+  .edit-overlay{
+    position:absolute;inset:0;background:rgba(10,12,15,0.92);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    z-index:50;padding:40px 24px;
+    opacity:0;pointer-events:none;
+    transition:opacity 0.3s;
+  }
+  .edit-overlay.show{opacity:1;pointer-events:auto;}
+  .edit-title{
+    font-family:'Fraunces',serif;font-weight:300;font-size:13px;
+    letter-spacing:0.4em;text-transform:uppercase;
+    color:var(--text-dim);margin-bottom:24px;
+  }
+  .edit-pickers{
+    display:flex;align-items:center;gap:8px;
+    margin-bottom:36px;
+  }
+  .picker{
+    display:flex;flex-direction:column;align-items:center;
+  }
+  .picker-label{
+    font-size:9px;letter-spacing:0.4em;color:var(--text-faint);
+    margin-bottom:8px;text-transform:uppercase;
+  }
+  .picker-value{
+    font-family:'Fraunces',serif;font-weight:300;
+    font-size:64px;line-height:1;color:var(--text);
+    width:90px;text-align:center;
+    font-feature-settings:"tnum";
+  }
+  .picker-controls{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
+  .picker-btn{
+    background:var(--surface);border:1px solid var(--line);
+    color:var(--text-dim);width:44px;height:32px;
+    border-radius:8px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .picker-btn:active{transform:scale(0.9);background:var(--surface-2);}
+  .edit-colon{
+    font-family:'Fraunces',serif;font-size:48px;
+    color:var(--text-faint);font-weight:200;align-self:flex-start;margin-top:24px;
+  }
+  .edit-actions{display:flex;gap:12px;}
+  .btn-pill{
+    background:transparent;border:1px solid var(--line);
+    color:var(--text);padding:12px 28px;border-radius:100px;
+    font-family:inherit;font-size:11px;letter-spacing:0.3em;
+    cursor:pointer;text-transform:uppercase;
+    transition:all 0.25s;
+  }
+  .btn-pill:active{transform:scale(0.96);}
+  .btn-pill.primary{background:var(--accent);color:var(--bg);border-color:transparent;}
+
+  /* ========== SETTINGS PANEL ========== */
+  .settings-panel{
+    position:absolute;top:0;right:0;bottom:0;
+    width:min(420px,100%);
+    background:var(--bg-2);
+    border-left:1px solid var(--line);
+    transform:translateX(100%);
+    transition:transform 0.45s cubic-bezier(.2,.85,.25,1);
+    z-index:100;
+    display:flex;flex-direction:column;
+    box-shadow:-30px 0 60px rgba(0,0,0,0.5);
+  }
+  .settings-panel.show{transform:translateX(0);}
+  .settings-header{
+    padding:24px;
+    display:flex;justify-content:space-between;align-items:center;
+    border-bottom:1px solid var(--line);
+  }
+  .settings-title{
+    font-family:'Fraunces',serif;font-weight:300;
+    font-size:22px;letter-spacing:0.04em;
+    margin:0;color:var(--text);
+  }
+  .settings-title .accent-bar{
+    display:inline-block;width:24px;height:1px;background:var(--accent);
+    vertical-align:middle;margin-right:12px;margin-bottom:4px;
+  }
+  .settings-body{
+    flex:1;overflow-y:auto;
+    padding:20px 24px 80px;
+  }
+  .settings-body::-webkit-scrollbar{width:0;}
+
+  .section{margin-bottom:32px;}
+  .section-label{
+    font-size:9px;letter-spacing:0.45em;color:var(--text-faint);
+    text-transform:uppercase;margin-bottom:14px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .section-label::before{
+    content:'';width:6px;height:1px;background:var(--text-faint);
+  }
+
+  .row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 0;border-bottom:1px solid var(--line);
+  }
+  .row:last-child{border-bottom:none;}
+  .row-text{display:flex;flex-direction:column;gap:3px;flex:1;padding-right:16px;}
+  .row-title{font-size:13px;color:var(--text);font-weight:400;}
+  .row-desc{font-size:11px;color:var(--text-faint);line-height:1.4;}
+
+  /* toggle */
+  .toggle{
+    position:relative;width:42px;height:24px;
+    background:var(--surface-2);border-radius:100px;
+    cursor:pointer;transition:background 0.3s;
+    border:1px solid var(--line);flex-shrink:0;
+  }
+  .toggle.on{background:var(--accent);border-color:transparent;}
+  .toggle::after{
+    content:'';position:absolute;left:2px;top:2px;
+    width:18px;height:18px;background:var(--text);
+    border-radius:50%;transition:all 0.3s cubic-bezier(.2,.8,.2,1);
+  }
+  .toggle.on::after{left:20px;background:var(--bg);}
+
+  /* select pill group */
+  .pill-group{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;}
+  .pill{
+    background:transparent;border:1px solid var(--line);
+    color:var(--text-dim);padding:7px 14px;border-radius:100px;
+    font-family:inherit;font-size:10px;letter-spacing:0.2em;
+    cursor:pointer;text-transform:uppercase;transition:all 0.2s;
+  }
+  .pill:active{transform:scale(0.94);}
+  .pill.active{color:var(--accent);border-color:rgba(125,211,192,0.4);background:rgba(125,211,192,0.06);}
+
+  /* slider */
+  .slider-wrap{margin-top:10px;display:flex;align-items:center;gap:12px;}
+  .slider{
+    flex:1;-webkit-appearance:none;appearance:none;height:2px;
+    background:var(--line-2);outline:none;border-radius:1px;
+  }
+  .slider::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;
+    width:16px;height:16px;border-radius:50%;
+    background:var(--accent);cursor:pointer;
+    box-shadow:0 0 10px var(--accent-glow);
+    border:2px solid var(--bg-2);
+  }
+  .slider::-moz-range-thumb{
+    width:16px;height:16px;border-radius:50%;
+    background:var(--accent);cursor:pointer;border:2px solid var(--bg-2);
+  }
+  .slider-val{
+    font-size:11px;color:var(--text-dim);font-feature-settings:"tnum";
+    min-width:48px;text-align:right;
+  }
+
+  /* file input */
+  .file-pill{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--surface);border:1px solid var(--line);
+    color:var(--text-dim);padding:9px 16px;border-radius:100px;
+    font-family:inherit;font-size:10px;letter-spacing:0.2em;
+    cursor:pointer;text-transform:uppercase;
+    transition:all 0.2s;margin-top:10px;
+  }
+  .file-pill:hover{color:var(--text);border-color:var(--line-2);}
+  .file-pill svg{width:12px;height:12px;}
+  .file-pill input{display:none;}
+  .file-name{
+    font-size:11px;color:var(--text-dim);margin-top:8px;
+    font-style:italic;
+  }
+  .file-name .clear{
+    color:var(--danger);cursor:pointer;margin-left:8px;
+    text-decoration:underline;font-style:normal;
+  }
+
+  /* ========== BACKDROP ========== */
+  .backdrop{
+    position:absolute;inset:0;background:rgba(0,0,0,0.5);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    z-index:90;opacity:0;pointer-events:none;
+    transition:opacity 0.4s;
+  }
+  .backdrop.show{opacity:1;pointer-events:auto;}
+
+  /* alert pulse when interval fires */
+  @keyframes pulse-glow{
+    0%,100%{box-shadow:inset 0 0 0 0 rgba(125,211,192,0);}
+    50%{box-shadow:inset 0 0 80px 20px rgba(125,211,192,0.15);}
+  }
+  #app.alerting{animation:pulse-glow 0.6s ease 3;}
+
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .view:not(.hidden){animation:fadeIn 0.5s ease both;}
+
+  /* small screens */
+  @media (max-height:680px){
+    .view{padding-top:60px;}
+    .presets{margin-top:24px;}
+    .controls{margin-top:22px;}
+    .ring-wrap{width:min(70vw,300px);}
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="icon">⏱️</div>
-        <h1>INTERVAL</h1>
-        <p>Welcome to INTERVAL - Your interval timing application</p>
-        <button class="button" onclick="alert('INTERVAL App is ready to use!')">Get Started</button>
-        <button id="installBtn" class="button install-btn" onclick="installApp()">📱 Install App</button>
-        <div class="status">
-            <p id="status">✅ App is ready. Works offline with service worker.</p>
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="brand">INTER<span>VAL</span></div>
+    <button class="icon-btn" id="settingsBtn" aria-label="Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ===== TIMER VIEW ===== -->
+  <div class="view" id="timerView">
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 200 200">
+        <circle class="ring-bg" cx="100" cy="100" r="94"/>
+        <circle class="ring-fg" id="ringFg" cx="100" cy="100" r="94"
+                pathLength="1000" stroke-dasharray="1000" stroke-dashoffset="0"/>
+      </svg>
+
+      <div class="center-display">
+        <div class="label-status" id="statusLabel">READY</div>
+        <div class="time-display" id="timeDisplay">25<span class="colon">:</span>00</div>
+        <div class="interval-meta" id="intervalMeta" style="display:none;">
+          <span>LOOP</span>
+          <span class="dot"></span>
+          <span class="count" id="loopCount">×0</span>
         </div>
+      </div>
     </div>
 
-    <script>
-        // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').then(reg => {
-                console.log('✅ Service Worker registered:', reg);
-            }).catch(err => {
-                console.log('❌ Service Worker registration failed:', err);
-            });
+    <div class="presets" id="presetsList">
+      <button class="chip" data-min="1">1m</button>
+      <button class="chip" data-min="5">5m</button>
+      <button class="chip" data-min="15">15m</button>
+      <button class="chip active" data-min="25">25m</button>
+      <button class="chip" data-min="45">45m</button>
+      <button class="chip" data-min="60">60m</button>
+      <button class="chip" data-min="custom">CUSTOM</button>
+    </div>
+
+    <div class="controls">
+      <button class="ctrl-btn danger" id="resetBtn" title="Reset" aria-label="Reset">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+          <path d="M3 3v5h5"/>
+        </svg>
+      </button>
+      <button class="ctrl-btn primary" id="startBtn" aria-label="Start">
+        <svg viewBox="0 0 24 24" fill="currentColor" id="startIcon">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </button>
+      <button class="ctrl-btn" id="skipBtn" title="Skip" aria-label="Skip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <polygon points="5 4 15 12 5 20 5 4" fill="currentColor"/>
+          <line x1="19" y1="5" x2="19" y2="19"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== STOPWATCH VIEW ===== -->
+  <div class="view hidden" id="stopwatchView">
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 200 200">
+        <circle class="ring-bg" cx="100" cy="100" r="94"/>
+      </svg>
+      <div class="center-display">
+        <div class="label-status" id="swStatus">READY</div>
+        <div class="time-display" id="swDisplay">00<span class="colon">:</span>00<span class="colon">.</span><span style="font-size:0.55em;color:var(--text-dim);">00</span></div>
+        <div class="interval-meta">
+          <span>LAPS</span>
+          <span class="dot"></span>
+          <span class="count" id="lapCount">×0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="laps-container" id="lapsContainer"></div>
+
+    <div class="controls">
+      <button class="ctrl-btn" id="swLapBtn" title="Lap" aria-label="Lap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </button>
+      <button class="ctrl-btn primary" id="swStartBtn" aria-label="Start">
+        <svg viewBox="0 0 24 24" fill="currentColor" id="swStartIcon">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </button>
+      <button class="ctrl-btn danger" id="swResetBtn" title="Reset" aria-label="Reset">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+          <path d="M3 3v5h5"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== MODE SWITCH ===== -->
+  <div class="mode-switch">
+    <button class="mode-btn active" data-mode="timer">Timer</button>
+    <button class="mode-btn" data-mode="stopwatch">Stopwatch</button>
+  </div>
+
+  <!-- ===== CUSTOM TIME OVERLAY ===== -->
+  <div class="edit-overlay" id="editOverlay">
+    <div class="edit-title">SET CUSTOM TIME</div>
+    <div class="edit-pickers">
+      <div class="picker">
+        <div class="picker-label">HOURS</div>
+        <div class="picker-value" id="pickH">00</div>
+        <div class="picker-controls">
+          <button class="picker-btn" data-pick="h" data-dir="1">▲</button>
+          <button class="picker-btn" data-pick="h" data-dir="-1">▼</button>
+        </div>
+      </div>
+      <div class="edit-colon">:</div>
+      <div class="picker">
+        <div class="picker-label">MINUTES</div>
+        <div class="picker-value" id="pickM">25</div>
+        <div class="picker-controls">
+          <button class="picker-btn" data-pick="m" data-dir="1">▲</button>
+          <button class="picker-btn" data-pick="m" data-dir="-1">▼</button>
+        </div>
+      </div>
+      <div class="edit-colon">:</div>
+      <div class="picker">
+        <div class="picker-label">SECONDS</div>
+        <div class="picker-value" id="pickS">00</div>
+        <div class="picker-controls">
+          <button class="picker-btn" data-pick="s" data-dir="1">▲</button>
+          <button class="picker-btn" data-pick="s" data-dir="-1">▼</button>
+        </div>
+      </div>
+    </div>
+    <div class="edit-actions">
+      <button class="btn-pill" id="cancelEdit">Cancel</button>
+      <button class="btn-pill primary" id="saveEdit">Set</button>
+    </div>
+  </div>
+
+  <!-- ===== SETTINGS BACKDROP ===== -->
+  <div class="backdrop" id="backdrop"></div>
+
+  <!-- ===== SETTINGS PANEL ===== -->
+  <div class="settings-panel" id="settingsPanel">
+    <div class="settings-header">
+      <h2 class="settings-title"><span class="accent-bar"></span>Settings</h2>
+      <button class="icon-btn" id="closeSettings" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <line x1="6" y1="6" x2="18" y2="18"/>
+          <line x1="6" y1="18" x2="18" y2="6"/>
+        </svg>
+      </button>
+    </div>
+    <div class="settings-body">
+
+      <div class="section">
+        <div class="section-label">Loop Behavior</div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Auto-loop intervals</div>
+            <div class="row-desc">When timer finishes, automatically restart the same interval until you stop it.</div>
+          </div>
+          <div class="toggle on" id="tgLoop"></div>
+        </div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Loop limit</div>
+            <div class="row-desc">Stop automatically after this many completed intervals. Set to 0 for unlimited.</div>
+            <div class="slider-wrap">
+              <input type="range" class="slider" id="loopLimit" min="0" max="20" value="0" step="1"/>
+              <div class="slider-val" id="loopLimitVal">∞</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Alerts</div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Vibrate</div>
+            <div class="row-desc">Pulse the phone when an interval ends. Requires browser vibration support.</div>
+          </div>
+          <div class="toggle on" id="tgVibrate"></div>
+        </div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Sound</div>
+            <div class="row-desc">Play an alert sound. Choose a built-in tone or upload your own.</div>
+            <div class="pill-group" id="soundGroup">
+              <button class="pill active" data-sound="chime">Chime</button>
+              <button class="pill" data-sound="bell">Bell</button>
+              <button class="pill" data-sound="pulse">Pulse</button>
+              <button class="pill" data-sound="digital">Digital</button>
+              <button class="pill" data-sound="custom">Custom</button>
+              <button class="pill" data-sound="none">Silent</button>
+            </div>
+            <label class="file-pill" id="fileLabel" style="display:none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              UPLOAD AUDIO
+              <input type="file" id="customSound" accept="audio/*" />
+            </label>
+            <div class="file-name" id="fileName" style="display:none;"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Volume</div>
+            <div class="row-desc">Adjust the alert sound level.</div>
+            <div class="slider-wrap">
+              <input type="range" class="slider" id="volume" min="0" max="100" value="80"/>
+              <div class="slider-val" id="volumeVal">80%</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Repeat alert</div>
+            <div class="row-desc">How many times to repeat the alert sound when the timer fires.</div>
+            <div class="slider-wrap">
+              <input type="range" class="slider" id="repeats" min="1" max="6" value="2"/>
+              <div class="slider-val" id="repeatsVal">×2</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Notifications</div>
+            <div class="row-desc">Show a system notification when an interval finishes (works when tab is in background).</div>
+          </div>
+          <div class="toggle" id="tgNotify"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Display</div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Keep screen awake</div>
+            <div class="row-desc">Prevent your phone from sleeping while the timer is running.</div>
+          </div>
+          <div class="toggle on" id="tgWake"></div>
+        </div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">Show milliseconds (stopwatch)</div>
+            <div class="row-desc">Display hundredths of a second for finer precision.</div>
+          </div>
+          <div class="toggle on" id="tgMs"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">About</div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-title">INTERVAL</div>
+            <div class="row-desc">v1.0 · Self-contained PWA · Install via your browser menu (“Add to Home screen”) for the full app experience offline.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* =========================================================
+   STATE
+   ========================================================= */
+const state = {
+  mode: 'timer',
+  // timer
+  duration: 25 * 60 * 1000,    // ms preset
+  remaining: 25 * 60 * 1000,
+  running: false,
+  paused: false,
+  startedAt: 0,
+  loops: 0,
+  selectedPreset: 25,
+  // stopwatch
+  swElapsed: 0,
+  swRunning: false,
+  swStartedAt: 0,
+  swLaps: [],
+  // settings
+  settings: {
+    loop: true,
+    loopLimit: 0,           // 0 = unlimited
+    vibrate: true,
+    sound: 'chime',
+    customSoundData: null,  // dataURL
+    customSoundName: '',
+    volume: 0.8,
+    repeats: 2,
+    notify: false,
+    wake: true,
+    showMs: true
+  }
+};
+
+let tickHandle = null;
+let swTickHandle = null;
+let wakeLock = null;
+let audioCtx = null;
+let customAudio = null;
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
+const STORAGE_KEY = 'interval_app_v1';
+function saveState(){
+  try{
+    const persist = {
+      mode: state.mode,
+      duration: state.duration,
+      selectedPreset: state.selectedPreset,
+      settings: state.settings
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(persist));
+  }catch(e){}
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const data = JSON.parse(raw);
+    if(data.duration) state.duration = state.remaining = data.duration;
+    if(data.selectedPreset !== undefined) state.selectedPreset = data.selectedPreset;
+    if(data.mode) state.mode = data.mode;
+    if(data.settings) Object.assign(state.settings, data.settings);
+    if(state.settings.customSoundData){
+      customAudio = new Audio(state.settings.customSoundData);
+    }
+  }catch(e){}
+}
+
+/* =========================================================
+   FORMATTING
+   ========================================================= */
+function fmtTime(ms){
+  if(ms < 0) ms = 0;
+  const totalSec = Math.ceil(ms / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const pad = n => String(n).padStart(2,'0');
+  if(h > 0) return `${pad(h)}<span class="colon">:</span>${pad(m)}<span class="colon">:</span>${pad(s)}`;
+  return `${pad(m)}<span class="colon">:</span>${pad(s)}`;
+}
+function fmtSw(ms){
+  const totalMs = Math.max(0, Math.floor(ms));
+  const h = Math.floor(totalMs / 3600000);
+  const m = Math.floor((totalMs % 3600000) / 60000);
+  const s = Math.floor((totalMs % 60000) / 1000);
+  const cs = Math.floor((totalMs % 1000) / 10);
+  const pad = n => String(n).padStart(2,'0');
+  const showMs = state.settings.showMs;
+  if(h > 0) return `${pad(h)}<span class="colon">:</span>${pad(m)}<span class="colon">:</span>${pad(s)}${showMs ? `<span class="colon">.</span><span style="font-size:0.55em;color:var(--text-dim);">${pad(cs)}</span>` : ''}`;
+  return `${pad(m)}<span class="colon">:</span>${pad(s)}${showMs ? `<span class="colon">.</span><span style="font-size:0.55em;color:var(--text-dim);">${pad(cs)}</span>` : ''}`;
+}
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+const el = {
+  app:            document.getElementById('app'),
+  // timer
+  timerView:      document.getElementById('timerView'),
+  timeDisplay:    document.getElementById('timeDisplay'),
+  ringFg:         document.getElementById('ringFg'),
+  statusLabel:    document.getElementById('statusLabel'),
+  intervalMeta:   document.getElementById('intervalMeta'),
+  loopCount:      document.getElementById('loopCount'),
+  startBtn:       document.getElementById('startBtn'),
+  startIcon:      document.getElementById('startIcon'),
+  resetBtn:       document.getElementById('resetBtn'),
+  skipBtn:        document.getElementById('skipBtn'),
+  presetsList:    document.getElementById('presetsList'),
+  // edit overlay
+  editOverlay:    document.getElementById('editOverlay'),
+  pickH:          document.getElementById('pickH'),
+  pickM:          document.getElementById('pickM'),
+  pickS:          document.getElementById('pickS'),
+  cancelEdit:     document.getElementById('cancelEdit'),
+  saveEdit:       document.getElementById('saveEdit'),
+  // stopwatch
+  stopwatchView:  document.getElementById('stopwatchView'),
+  swDisplay:      document.getElementById('swDisplay'),
+  swStartBtn:     document.getElementById('swStartBtn'),
+  swStartIcon:    document.getElementById('swStartIcon'),
+  swResetBtn:     document.getElementById('swResetBtn'),
+  swLapBtn:       document.getElementById('swLapBtn'),
+  swStatus:       document.getElementById('swStatus'),
+  lapsContainer:  document.getElementById('lapsContainer'),
+  lapCount:       document.getElementById('lapCount'),
+  // settings
+  settingsBtn:    document.getElementById('settingsBtn'),
+  settingsPanel:  document.getElementById('settingsPanel'),
+  closeSettings:  document.getElementById('closeSettings'),
+  backdrop:       document.getElementById('backdrop'),
+  tgLoop:         document.getElementById('tgLoop'),
+  tgVibrate:      document.getElementById('tgVibrate'),
+  tgNotify:       document.getElementById('tgNotify'),
+  tgWake:         document.getElementById('tgWake'),
+  tgMs:           document.getElementById('tgMs'),
+  loopLimit:      document.getElementById('loopLimit'),
+  loopLimitVal:   document.getElementById('loopLimitVal'),
+  volume:         document.getElementById('volume'),
+  volumeVal:      document.getElementById('volumeVal'),
+  repeats:        document.getElementById('repeats'),
+  repeatsVal:     document.getElementById('repeatsVal'),
+  soundGroup:     document.getElementById('soundGroup'),
+  fileLabel:      document.getElementById('fileLabel'),
+  customSound:    document.getElementById('customSound'),
+  fileName:       document.getElementById('fileName')
+};
+
+/* =========================================================
+   AUDIO ENGINE — synthesized tones
+   ========================================================= */
+function getCtx(){
+  if(!audioCtx){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playTone(type){
+  const ctx = getCtx();
+  const vol = state.settings.volume;
+  const gainMaster = ctx.createGain();
+  gainMaster.gain.value = vol;
+  gainMaster.connect(ctx.destination);
+
+  const now = ctx.currentTime;
+
+  if(type === 'chime'){
+    [880, 1320, 1760].forEach((freq, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.value = freq;
+      const t = now + i * 0.13;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.35, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 1.4);
+      o.connect(g); g.connect(gainMaster);
+      o.start(t); o.stop(t + 1.5);
+    });
+  } else if(type === 'bell'){
+    [523.25, 659.25, 783.99].forEach(freq => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.linearRampToValueAtTime(0.4, now + 0.005);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
+      o.connect(g); g.connect(gainMaster);
+      o.start(now); o.stop(now + 2.1);
+    });
+  } else if(type === 'pulse'){
+    for(let i = 0; i < 3; i++){
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.value = 440;
+      const t = now + i * 0.18;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.5, t + 0.01);
+      g.gain.linearRampToValueAtTime(0, t + 0.12);
+      o.connect(g); g.connect(gainMaster);
+      o.start(t); o.stop(t + 0.13);
+    }
+  } else if(type === 'digital'){
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'square';
+    o.frequency.setValueAtTime(1200, now);
+    o.frequency.setValueAtTime(800, now + 0.1);
+    o.frequency.setValueAtTime(1200, now + 0.2);
+    g.gain.setValueAtTime(0.25, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+    o.connect(g); g.connect(gainMaster);
+    o.start(now); o.stop(now + 0.42);
+  }
+}
+
+function playAlert(){
+  const sound = state.settings.sound;
+  if(sound === 'none') return;
+
+  if(sound === 'custom' && customAudio){
+    let played = 0;
+    const playOnce = () => {
+      try{
+        const a = customAudio.cloneNode();
+        a.volume = state.settings.volume;
+        a.play().catch(()=>{});
+        played++;
+        if(played < state.settings.repeats){
+          setTimeout(playOnce, 1600);
         }
+      }catch(e){}
+    };
+    playOnce();
+    return;
+  }
 
-        // PWA Install Prompt
-        let deferredPrompt;
-        const installBtn = document.getElementById('installBtn');
+  // synthesized
+  let played = 0;
+  const playOnce = () => {
+    playTone(sound);
+    played++;
+    if(played < state.settings.repeats){
+      setTimeout(playOnce, 1700);
+    }
+  };
+  playOnce();
+}
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.style.display = 'inline-block';
-        });
+/* =========================================================
+   ALERTS — vibration + notification
+   ========================================================= */
+function fireAlert(){
+  // visual flash
+  el.app.classList.add('alerting');
+  setTimeout(() => el.app.classList.remove('alerting'), 1800);
 
-        function installApp() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('✅ App installed!');
-                    }
-                    deferredPrompt = null;
-                });
-            }
-        }
-    </script>
+  if(state.settings.vibrate && navigator.vibrate){
+    navigator.vibrate([300, 120, 300, 120, 500]);
+  }
+  playAlert();
+  if(state.settings.notify && 'Notification' in window && Notification.permission === 'granted'){
+    try{
+      new Notification('INTERVAL', {
+        body: `Interval ${state.loops} complete${state.settings.loop ? ' — next started' : ''}.`,
+        silent: true,
+        icon: 'icon-192.png'
+      });
+    }catch(e){}
+  }
+}
+
+/* =========================================================
+   TIMER LOGIC
+   ========================================================= */
+function updateTimerUI(){
+  el.timeDisplay.innerHTML = fmtTime(state.remaining);
+
+  // ring progress
+  const pct = state.duration > 0 ? state.remaining / state.duration : 0;
+  el.ringFg.style.strokeDashoffset = 1000 - (1000 * pct);
+
+  // status label
+  el.statusLabel.classList.remove('active','paused');
+  if(state.running){
+    el.statusLabel.textContent = 'RUNNING';
+    el.statusLabel.classList.add('active');
+  } else if(state.paused){
+    el.statusLabel.textContent = 'PAUSED';
+    el.statusLabel.classList.add('paused');
+  } else {
+    el.statusLabel.textContent = 'READY';
+  }
+
+  // start icon (play vs pause)
+  if(state.running){
+    el.startIcon.outerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" id="startIcon"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>`;
+  } else {
+    el.startIcon.outerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" id="startIcon"><path d="M8 5v14l11-7z"/></svg>`;
+  }
+  el.startIcon = document.getElementById('startIcon');
+
+  // loop counter visibility
+  if(state.loops > 0){
+    el.intervalMeta.style.display = 'flex';
+    el.loopCount.textContent = `×${state.loops}`;
+  } else {
+    el.intervalMeta.style.display = 'none';
+  }
+}
+
+function tick(){
+  if(!state.running) return;
+  const now = Date.now();
+  const elapsed = now - state.startedAt;
+  state.remaining = Math.max(0, state.duration - elapsed);
+
+  if(state.remaining <= 0){
+    state.loops += 1;
+    fireAlert();
+
+    const limitReached = state.settings.loopLimit > 0 && state.loops >= state.settings.loopLimit;
+
+    if(state.settings.loop && !limitReached){
+      // restart same interval
+      state.startedAt = Date.now();
+      state.remaining = state.duration;
+    } else {
+      // stop
+      state.running = false;
+      state.paused = false;
+      state.remaining = state.duration;
+      cancelAnimationFrame(tickHandle);
+      releaseWakeLock();
+    }
+    updateTimerUI();
+    return;
+  }
+  updateTimerUI();
+  tickHandle = requestAnimationFrame(tick);
+}
+
+function startTimer(){
+  if(state.duration <= 0) return;
+  // unlock audio context with user gesture
+  getCtx();
+  // request notification permission lazily
+  if(state.settings.notify && 'Notification' in window && Notification.permission === 'default'){
+    Notification.requestPermission();
+  }
+  if(!state.paused){
+    state.remaining = state.duration;
+    state.loops = 0;
+  }
+  state.startedAt = Date.now() - (state.duration - state.remaining);
+  state.running = true;
+  state.paused = false;
+  requestWakeLock();
+  updateTimerUI();
+  tickHandle = requestAnimationFrame(tick);
+}
+function pauseTimer(){
+  state.running = false;
+  state.paused = true;
+  cancelAnimationFrame(tickHandle);
+  releaseWakeLock();
+  updateTimerUI();
+}
+function resetTimer(){
+  state.running = false;
+  state.paused = false;
+  state.remaining = state.duration;
+  state.loops = 0;
+  cancelAnimationFrame(tickHandle);
+  releaseWakeLock();
+  updateTimerUI();
+}
+function skipTimer(){
+  if(!state.running && !state.paused) return;
+  state.loops += 1;
+  state.remaining = state.duration;
+  state.startedAt = Date.now();
+  if(!state.running) state.startedAt = Date.now();
+  updateTimerUI();
+}
+
+/* =========================================================
+   STOPWATCH LOGIC
+   ========================================================= */
+function updateSwUI(){
+  el.swDisplay.innerHTML = fmtSw(state.swElapsed);
+  el.swStatus.classList.remove('active','paused');
+  if(state.swRunning){
+    el.swStatus.textContent = 'RUNNING';
+    el.swStatus.classList.add('active');
+    el.swStartIcon.outerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" id="swStartIcon"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>`;
+  } else if(state.swElapsed > 0){
+    el.swStatus.textContent = 'PAUSED';
+    el.swStatus.classList.add('paused');
+    el.swStartIcon.outerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" id="swStartIcon"><path d="M8 5v14l11-7z"/></svg>`;
+  } else {
+    el.swStatus.textContent = 'READY';
+    el.swStartIcon.outerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" id="swStartIcon"><path d="M8 5v14l11-7z"/></svg>`;
+  }
+  el.swStartIcon = document.getElementById('swStartIcon');
+  el.lapCount.textContent = `×${state.swLaps.length}`;
+}
+
+function swTick(){
+  if(!state.swRunning) return;
+  state.swElapsed = Date.now() - state.swStartedAt;
+  el.swDisplay.innerHTML = fmtSw(state.swElapsed);
+  swTickHandle = requestAnimationFrame(swTick);
+}
+function swStart(){
+  if(state.swRunning){
+    // pause
+    state.swRunning = false;
+    cancelAnimationFrame(swTickHandle);
+    releaseWakeLock();
+  } else {
+    state.swStartedAt = Date.now() - state.swElapsed;
+    state.swRunning = true;
+    requestWakeLock();
+    swTickHandle = requestAnimationFrame(swTick);
+  }
+  updateSwUI();
+}
+function swReset(){
+  state.swRunning = false;
+  state.swElapsed = 0;
+  state.swLaps = [];
+  cancelAnimationFrame(swTickHandle);
+  releaseWakeLock();
+  renderLaps();
+  updateSwUI();
+}
+function swLap(){
+  if(!state.swRunning && state.swElapsed === 0) return;
+  state.swLaps.unshift({ n: state.swLaps.length + 1, t: state.swElapsed });
+  renderLaps();
+  updateSwUI();
+}
+function renderLaps(){
+  el.lapsContainer.innerHTML = state.swLaps.map(l =>
+    `<div class="lap-row"><span class="lap-num">LAP ${String(l.n).padStart(2,'0')}</span><span class="lap-time">${fmtSw(l.t).replace(/<[^>]+>/g,'').replace(/\s/g,'')}</span></div>`
+  ).join('');
+}
+
+/* =========================================================
+   WAKE LOCK
+   ========================================================= */
+async function requestWakeLock(){
+  if(!state.settings.wake) return;
+  if('wakeLock' in navigator){
+    try{
+      wakeLock = await navigator.wakeLock.request('screen');
+    }catch(e){}
+  }
+}
+function releaseWakeLock(){
+  if(wakeLock){
+    try{ wakeLock.release(); }catch(e){}
+    wakeLock = null;
+  }
+}
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'visible' && (state.running || state.swRunning)){
+    requestWakeLock();
+  }
+});
+
+/* =========================================================
+   MODE SWITCH
+   ========================================================= */
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.mode = btn.dataset.mode;
+    if(state.mode === 'timer'){
+      el.timerView.classList.remove('hidden');
+      el.stopwatchView.classList.add('hidden');
+    } else {
+      el.timerView.classList.add('hidden');
+      el.stopwatchView.classList.remove('hidden');
+    }
+    saveState();
+  });
+});
+
+/* =========================================================
+   PRESETS + CUSTOM EDIT
+   ========================================================= */
+el.presetsList.addEventListener('click', (e) => {
+  const btn = e.target.closest('.chip');
+  if(!btn) return;
+  if(btn.dataset.min === 'custom'){
+    openEdit();
+    return;
+  }
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  state.selectedPreset = parseInt(btn.dataset.min);
+  state.duration = state.selectedPreset * 60 * 1000;
+  state.remaining = state.duration;
+  state.loops = 0;
+  state.running = false;
+  state.paused = false;
+  cancelAnimationFrame(tickHandle);
+  updateTimerUI();
+  saveState();
+});
+
+let pickState = { h: 0, m: 25, s: 0 };
+function openEdit(){
+  // populate from current
+  const total = Math.floor(state.duration / 1000);
+  pickState.h = Math.floor(total / 3600);
+  pickState.m = Math.floor((total % 3600) / 60);
+  pickState.s = total % 60;
+  renderPick();
+  el.editOverlay.classList.add('show');
+}
+function renderPick(){
+  el.pickH.textContent = String(pickState.h).padStart(2,'0');
+  el.pickM.textContent = String(pickState.m).padStart(2,'0');
+  el.pickS.textContent = String(pickState.s).padStart(2,'0');
+}
+document.querySelectorAll('.picker-btn').forEach(b => {
+  let intHandle, toHandle;
+  const change = () => {
+    const k = b.dataset.pick;
+    const dir = parseInt(b.dataset.dir);
+    if(k === 'h') pickState.h = Math.max(0, Math.min(23, pickState.h + dir));
+    if(k === 'm') pickState.m = Math.max(0, Math.min(59, pickState.m + dir));
+    if(k === 's') pickState.s = Math.max(0, Math.min(59, pickState.s + dir));
+    renderPick();
+  };
+  b.addEventListener('click', change);
+  // hold-to-repeat
+  b.addEventListener('pointerdown', () => {
+    toHandle = setTimeout(() => {
+      intHandle = setInterval(change, 80);
+    }, 400);
+  });
+  ['pointerup','pointerleave','pointercancel'].forEach(ev => {
+    b.addEventListener(ev, () => {
+      clearTimeout(toHandle);
+      clearInterval(intHandle);
+    });
+  });
+});
+el.cancelEdit.addEventListener('click', () => el.editOverlay.classList.remove('show'));
+el.saveEdit.addEventListener('click', () => {
+  const totalMs = (pickState.h * 3600 + pickState.m * 60 + pickState.s) * 1000;
+  if(totalMs <= 0) return;
+  state.duration = totalMs;
+  state.remaining = totalMs;
+  state.loops = 0;
+  state.running = false;
+  state.paused = false;
+  state.selectedPreset = 'custom';
+  cancelAnimationFrame(tickHandle);
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.min === 'custom');
+  });
+  el.editOverlay.classList.remove('show');
+  updateTimerUI();
+  saveState();
+});
+
+/* =========================================================
+   MAIN BUTTONS
+   ========================================================= */
+el.startBtn.addEventListener('click', () => {
+  if(state.running) pauseTimer();
+  else startTimer();
+});
+el.resetBtn.addEventListener('click', resetTimer);
+el.skipBtn.addEventListener('click', skipTimer);
+
+el.swStartBtn.addEventListener('click', swStart);
+el.swResetBtn.addEventListener('click', swReset);
+el.swLapBtn.addEventListener('click', swLap);
+
+/* =========================================================
+   SETTINGS PANEL
+   ========================================================= */
+function openSettings(){
+  el.settingsPanel.classList.add('show');
+  el.backdrop.classList.add('show');
+}
+function closeSettings(){
+  el.settingsPanel.classList.remove('show');
+  el.backdrop.classList.remove('show');
+}
+el.settingsBtn.addEventListener('click', openSettings);
+el.closeSettings.addEventListener('click', closeSettings);
+el.backdrop.addEventListener('click', closeSettings);
+
+function bindToggle(elx, key, onChange){
+  elx.addEventListener('click', () => {
+    elx.classList.toggle('on');
+    state.settings[key] = elx.classList.contains('on');
+    if(onChange) onChange();
+    saveState();
+  });
+}
+bindToggle(el.tgLoop, 'loop');
+bindToggle(el.tgVibrate, 'vibrate', () => {
+  if(state.settings.vibrate && navigator.vibrate) navigator.vibrate(80);
+});
+bindToggle(el.tgWake, 'wake');
+bindToggle(el.tgMs, 'showMs', () => updateSwUI());
+bindToggle(el.tgNotify, 'notify', () => {
+  if(state.settings.notify && 'Notification' in window){
+    if(Notification.permission === 'default') Notification.requestPermission();
+  }
+});
+
+el.loopLimit.addEventListener('input', () => {
+  const v = parseInt(el.loopLimit.value);
+  state.settings.loopLimit = v;
+  el.loopLimitVal.textContent = v === 0 ? '∞' : `×${v}`;
+  saveState();
+});
+
+el.volume.addEventListener('input', () => {
+  state.settings.volume = parseInt(el.volume.value) / 100;
+  el.volumeVal.textContent = `${el.volume.value}%`;
+  saveState();
+});
+el.volume.addEventListener('change', () => {
+  // preview tone
+  if(state.settings.sound !== 'none' && state.settings.sound !== 'custom'){
+    playTone(state.settings.sound);
+  }
+});
+
+el.repeats.addEventListener('input', () => {
+  state.settings.repeats = parseInt(el.repeats.value);
+  el.repeatsVal.textContent = `×${el.repeats.value}`;
+  saveState();
+});
+
+el.soundGroup.addEventListener('click', (e) => {
+  const p = e.target.closest('.pill');
+  if(!p) return;
+  document.querySelectorAll('#soundGroup .pill').forEach(x => x.classList.remove('active'));
+  p.classList.add('active');
+  state.settings.sound = p.dataset.sound;
+  el.fileLabel.style.display = p.dataset.sound === 'custom' ? 'inline-flex' : 'none';
+  el.fileName.style.display = (p.dataset.sound === 'custom' && state.settings.customSoundName) ? 'block' : 'none';
+  saveState();
+  // preview
+  if(p.dataset.sound !== 'none'){
+    if(p.dataset.sound === 'custom' && customAudio){
+      customAudio.volume = state.settings.volume;
+      customAudio.play().catch(()=>{});
+    } else if(p.dataset.sound !== 'custom'){
+      playTone(p.dataset.sound);
+    }
+  }
+});
+
+el.customSound.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    state.settings.customSoundData = reader.result;
+    state.settings.customSoundName = file.name;
+    customAudio = new Audio(reader.result);
+    el.fileName.innerHTML = `${file.name} <span class="clear" id="clearCustom">remove</span>`;
+    el.fileName.style.display = 'block';
+    document.getElementById('clearCustom').addEventListener('click', clearCustom);
+    saveState();
+  };
+  reader.readAsDataURL(file);
+});
+function clearCustom(){
+  state.settings.customSoundData = null;
+  state.settings.customSoundName = '';
+  customAudio = null;
+  el.fileName.style.display = 'none';
+  el.customSound.value = '';
+  saveState();
+}
+
+/* =========================================================
+   APPLY LOADED SETTINGS TO UI
+   ========================================================= */
+function applySettings(){
+  el.tgLoop.classList.toggle('on', state.settings.loop);
+  el.tgVibrate.classList.toggle('on', state.settings.vibrate);
+  el.tgNotify.classList.toggle('on', state.settings.notify);
+  el.tgWake.classList.toggle('on', state.settings.wake);
+  el.tgMs.classList.toggle('on', state.settings.showMs);
+
+  el.loopLimit.value = state.settings.loopLimit;
+  el.loopLimitVal.textContent = state.settings.loopLimit === 0 ? '∞' : `×${state.settings.loopLimit}`;
+
+  el.volume.value = Math.round(state.settings.volume * 100);
+  el.volumeVal.textContent = `${Math.round(state.settings.volume * 100)}%`;
+
+  el.repeats.value = state.settings.repeats;
+  el.repeatsVal.textContent = `×${state.settings.repeats}`;
+
+  document.querySelectorAll('#soundGroup .pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.sound === state.settings.sound);
+  });
+  el.fileLabel.style.display = state.settings.sound === 'custom' ? 'inline-flex' : 'none';
+  if(state.settings.customSoundName){
+    el.fileName.innerHTML = `${state.settings.customSoundName} <span class="clear" id="clearCustom">remove</span>`;
+    el.fileName.style.display = state.settings.sound === 'custom' ? 'block' : 'none';
+    setTimeout(() => {
+      const c = document.getElementById('clearCustom');
+      if(c) c.addEventListener('click', clearCustom);
+    }, 0);
+  }
+
+  // mode
+  if(state.mode === 'stopwatch'){
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === 'stopwatch'));
+    el.timerView.classList.add('hidden');
+    el.stopwatchView.classList.remove('hidden');
+  }
+
+  // preset
+  document.querySelectorAll('.chip').forEach(c => {
+    if(state.selectedPreset === 'custom'){
+      c.classList.toggle('active', c.dataset.min === 'custom');
+    } else {
+      c.classList.toggle('active', parseInt(c.dataset.min) === state.selectedPreset);
+    }
+  });
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+loadState();
+applySettings();
+updateTimerUI();
+updateSwUI();
+
+// register service worker for offline / installability
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
 </body>
 </html>
